@@ -2,6 +2,9 @@ namespace MomAndBaby
 {
     public class WeatherForecast
     {
+        /// <summary>
+        /// Note: This class is used to generate the weather forecast data.
+        /// </summary>
         public DateOnly Date { get; set; }
 
         public int TemperatureC { get; set; }
