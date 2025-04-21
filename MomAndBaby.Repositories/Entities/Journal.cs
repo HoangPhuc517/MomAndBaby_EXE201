@@ -1,6 +1,6 @@
 ﻿namespace MomAndBaby.Repositories.Entities
 {
-    public class Journal
+    public class Journal : BaseEntity
     {
         public string Head { get; set; }
         public string? Content { get; set; }

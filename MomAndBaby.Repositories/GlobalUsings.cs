@@ -4,3 +4,6 @@ global using System.Linq;
 global using System.Text;
 global using System.Threading.Tasks;
 global using MomAndBaby.Core.Base;
+global using MomAndBaby.Repositories.Entities;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Metadata.Builders;

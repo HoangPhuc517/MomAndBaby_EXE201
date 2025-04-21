@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace MomAndBaby.Repositories.Entities
 {
-    public class UserPackage : BaseEntity
+    public class Comment : BaseEntity
     {
-        public DateTimeOffset ExpiryDate { get; set; }
-        public int ValidMonths { get; set; }
+        public string Content { get; set; }
         public Guid UserId { get; set; }
-        public Guid ServicePackageId { get; set; }
+        public Guid BlogId { get; set; }
         public virtual User User { get; set; }
-        public virtual ServicePackage ServicePackage { get; set; }
+        public virtual Blog Blog { get; set; }
+        public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
     }
 }

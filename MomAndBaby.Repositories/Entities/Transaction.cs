@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MomAndBaby.Repositories.Entities
+﻿namespace MomAndBaby.Repositories.Entities
 {
-    public class Transaction
+    public class Transaction : BaseEntity
     {
         public decimal Amount { get; set; }
         public string Type { get; set; }
-        public string Description { get; set; }
+        public string? Message { get; set; }
+        public string TransferAccountName { get; set; }
+        public string TransferAccountNumber { get; set; }
         public Guid UserId { get; set; }
         public virtual User User { get; set; }
     }

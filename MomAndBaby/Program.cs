@@ -1,6 +1,26 @@
+using Microsoft.EntityFrameworkCore;
+using MomAndBaby.API;
+using MomAndBaby.Repositories;
+using MomAndBaby.Repositories.ConfigContext;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+#region MyConfiguration
+
+builder.Services.AddConfigurationRepositories()
+                .AddConfigurationAPI(builder.Configuration);
+
+
+builder.Configuration
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables();
+
+#endregion
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -9,6 +29,13 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Configure the database context
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<MBContext>();
+    dbContext.Database.Migrate();
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -16,7 +43,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("AllowSpecificOrigins");
+
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

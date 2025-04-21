@@ -1,6 +1,6 @@
 ﻿namespace MomAndBaby.Repositories.Entities
 {
-    public class Appointment
+    public class Appointment : BaseEntity
     {
         public string Content { get; set; }
         public string Type { get; set; }
@@ -15,5 +15,6 @@
         public virtual Expert Expert { get; set; }
         public virtual Feedback Feedback { get; set; }
         public virtual Journal Journal { get; set; }
+        public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
     }
 }
