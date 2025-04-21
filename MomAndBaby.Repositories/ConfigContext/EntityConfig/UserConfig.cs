@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MomAndBaby.Core.Store;
 
 namespace MomAndBaby.Repositories.ConfigContext.EntityConfig
 {
@@ -17,10 +18,16 @@ namespace MomAndBaby.Repositories.ConfigContext.EntityConfig
             builder.Property(u => u.FullName)
                 .IsRequired();
 
-            builder.Property(u => u.Avatar)
-                .IsRequired();
+            builder.Property(u => u.Avatar);
 
             builder.Property(u => u.DateOfBirth)
+                .IsRequired();
+
+            builder.Property(u => u.Sex)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (UserSexEnum)Enum.Parse(typeof(UserSexEnum), v) 
+                )
                 .IsRequired();
 
             builder.Property(u => u.Status)

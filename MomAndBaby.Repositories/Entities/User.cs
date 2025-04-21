@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using MomAndBaby.Core.Store;
 
 namespace MomAndBaby.Repositories.Entities
 {
     public class User : IdentityUser<Guid>
     {
         public string FullName { get; set; }
-        public string Avatar { get; set; }
-        public string DateOfBirth { get; set; }
+        public string? Avatar { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public UserSexEnum Sex { get; set; }
         public string Status { get; set; }
         public DateTimeOffset CreatedTime { get; set; }
         public DateTimeOffset UpdatedTime { get; set; }
@@ -24,5 +26,7 @@ namespace MomAndBaby.Repositories.Entities
         public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
         public virtual ICollection<ChatHub> ChatHubsAsFirstUser { get; set; } = new List<ChatHub>();
         public virtual ICollection<ChatHub> ChatHubsAsSecondUser { get; set; } = new List<ChatHub>();
+        public string? RefreshToken { get; set; }
+        public DateTimeOffset? DateExpireRefreshToken { get; set; }
     }
 }
