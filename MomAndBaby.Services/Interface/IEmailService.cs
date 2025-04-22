@@ -9,5 +9,6 @@ namespace MomAndBaby.Services.Interface
     public interface IEmailService
     {
         public Task SendMailRegister(string email);
+        public Task SendMailForgotPassword(string email, string token);
     }
 }

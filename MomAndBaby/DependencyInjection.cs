@@ -45,6 +45,11 @@ namespace MomAndBaby.API
                 //Config SigIn
                 options.SignIn.RequireConfirmedPhoneNumber = false;
                 options.SignIn.RequireConfirmedEmail = false;
+
+                //Config Lockout
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(60*2);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
             })
             .AddEntityFrameworkStores<MBContext>()
             .AddDefaultTokenProviders();

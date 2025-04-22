@@ -12,7 +12,6 @@ namespace MomAndBaby.Repositories.Entities
         public string Status { get; set; }
         public DateTimeOffset CreatedTime { get; set; }
         public DateTimeOffset UpdatedTime { get; set; }
-        public Guid? ExpertId { get; set; }
         public virtual Expert? Expert { get; set; }
         public virtual ICollection<UserPackage> UserPackages { get; set; } = new List<UserPackage>();
         public virtual ICollection<Report> Reports { get; set; } = new List<Report>();

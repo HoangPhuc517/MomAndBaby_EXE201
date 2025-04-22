@@ -20,6 +20,7 @@ namespace MomAndBaby.Services
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 
             //Config Coudinary
