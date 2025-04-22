@@ -64,6 +64,3 @@ internal class Program
     }
 }
 
-#region MyConfiguration
-
-#endregion

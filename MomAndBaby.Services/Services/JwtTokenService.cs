@@ -14,6 +14,7 @@ using MomAndBaby.Repositories.Entities;
 using MomAndBaby.Repositories.Interface;
 using MomAndBaby.Services.DTO.UserModel;
 using MomAndBaby.Services.Interface;
+using StackExchange.Redis;
 
 namespace MomAndBaby.Services.Services
 {
@@ -45,7 +46,7 @@ namespace MomAndBaby.Services.Services
     };
 
             IEnumerable<string> roles = await _userManager.GetRolesAsync(user);
-            foreach (string role in roles)
+                foreach (string role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }

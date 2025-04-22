@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +19,7 @@ using MomAndBaby.Services.Interface;
 
 namespace MomAndBaby.Services.Services
 {
-    public class AuthenticationService : IAuthenticationService
+    public class AuthenticationService : Interface.IAuthenticationService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<User> _userManager;
@@ -25,8 +28,9 @@ namespace MomAndBaby.Services.Services
         private readonly RoleManager<IdentityRole<Guid>> _roleManager;
         private readonly IJwtTokenService _jwtTokenService;
         private readonly IEmailService _emailService;
+        private readonly ICurrentUserService _currentUserService;
 
-        public AuthenticationService(IUnitOfWork unitOfWork, UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper, RoleManager<IdentityRole<Guid>> roleManager, IJwtTokenService jwtTokenService, IEmailService emailService)
+        public AuthenticationService(IUnitOfWork unitOfWork, UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper, RoleManager<IdentityRole<Guid>> roleManager, IJwtTokenService jwtTokenService, IEmailService emailService, ICurrentUserService currentUserService)
         {
             _unitOfWork = unitOfWork;
             _userManager = userManager;
@@ -35,6 +39,7 @@ namespace MomAndBaby.Services.Services
             _roleManager = roleManager;
             _jwtTokenService = jwtTokenService;
             _emailService = emailService;
+            _currentUserService = currentUserService;
         }
         public async Task<string> RegisterCustomerAsync(RegisterCustomerDTO model)
         {
@@ -149,7 +154,6 @@ namespace MomAndBaby.Services.Services
 
         public async Task<AuthenResponse> LoginAsync(LoginRequest model)
         {
-            await _unitOfWork.BeginTransactionAsync();
             try
             {
                 var user = await _userManager.FindByNameAsync(model.UserName);
@@ -159,7 +163,20 @@ namespace MomAndBaby.Services.Services
                     throw new BaseException(StatusCodes.Status404NotFound, "Account not found!!!");
                 }
 
-                var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
+                if (user.LockoutEnd >= DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7)))
+                {
+                    var lockoutEnd = await _userManager.GetLockoutEndDateAsync(user);
+                    var lockoutTime = lockoutEnd?.UtcDateTime.ToLocalTime().ToString("dd/MM/yyyy HH:mm");
+                    throw new BaseException(StatusCodes.Status403Forbidden, $"Your account is temporarily locked. Please try again after: {lockoutTime}");
+                }
+
+                var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, true);
+                if (result.IsLockedOut)
+                {
+                    var lockoutEnd = await _userManager.GetLockoutEndDateAsync(user);
+                    var lockoutTime = lockoutEnd?.UtcDateTime.ToLocalTime().ToString("dd/MM/yyyy HH:mm");
+                    throw new BaseException(StatusCodes.Status403Forbidden, $"Your account is temporarily locked. Please try again after: {lockoutTime}");
+                }
                 if (!result.Succeeded)
                 {
                     throw new BaseException(StatusCodes.Status401Unauthorized, "Invalid password!!!");
@@ -182,7 +199,6 @@ namespace MomAndBaby.Services.Services
 
                 _unitOfWork.GenericRepository<User>().Update(user);
                 await _unitOfWork.SaveChangeAsync();
-                await _unitOfWork.CommitTransactionAsync();
 
                 return new AuthenResponse
                 {
@@ -192,7 +208,6 @@ namespace MomAndBaby.Services.Services
             }
             catch
             {
-                await _unitOfWork.RollbackTransactionAsync();
                 throw;
             }
         }
@@ -213,6 +228,84 @@ namespace MomAndBaby.Services.Services
             if (!result.Succeeded)
             {
                 throw new BaseException(StatusCodes.Status400BadRequest, "Confirm email failed!!!");
+            }
+        }
+
+        public async Task LogoutAsync()
+        {
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                var user = await _currentUserService.GetCurrentAccountAsync();
+                if (user is null)
+                {
+                    throw new BaseException(StatusCodes.Status404NotFound, "Account not found!!!");
+                }
+                user.RefreshToken = null;
+                user.DateExpireRefreshToken = null;
+                await _userManager.UpdateAsync(user);
+                await _unitOfWork.SaveChangeAsync();
+                await _unitOfWork.CommitTransactionAsync();
+
+            }
+            catch
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw;
+            }
+        }
+
+        public async Task<string> ForgotPasswod(string email)
+        {
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user == null)
+                {
+                    throw new BaseException(StatusCodes.Status404NotFound, "Account not found!!!");
+                }
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var plainTextBytes = Encoding.UTF8.GetBytes(token);
+                var encodedToken = Base64UrlTextEncoder.Encode(plainTextBytes);
+                await _emailService.SendMailForgotPassword(email, encodedToken);
+                await _unitOfWork.SaveChangeAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return encodedToken;
+            }
+            catch
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw;
+            }
+        }
+        
+        public async Task ResetPassword(string email, string token, string newPassword)
+        {
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user == null)
+                {
+                    throw new BaseException(StatusCodes.Status404NotFound, "Account not found!!!");
+                }
+
+                var base64EncodedBytes = Convert.FromBase64String(token);
+                var tokenEnCode = Encoding.UTF8.GetString(base64EncodedBytes);
+
+                var result = await _userManager.ResetPasswordAsync(user, tokenEnCode, newPassword);
+                if (!result.Succeeded)
+                {
+                    throw new BaseException(StatusCodes.Status400BadRequest, "Reset password failed!!!");
+                }
+                await _unitOfWork.SaveChangeAsync();
+                await _unitOfWork.CommitTransactionAsync();
+            }
+            catch
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw;
             }
         }
     }
