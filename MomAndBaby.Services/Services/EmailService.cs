@@ -63,8 +63,7 @@ namespace MomAndBaby.Services.Services
             var queryParams = new Dictionary<string, string?>
             {
                 { "email", email },
-                { "token", token },
-                { "newPassword", "Nguvl123@" }
+                { "token", token }
             };
 
             var url = QueryHelpers.AddQueryString($"{_mailSettings.Url}api/authen/reset-password", queryParams);

@@ -32,9 +32,9 @@
         }
 
         /// <summary>
-        /// page number start from 0
+        /// page number start from 1
         /// </summary>
-        public bool Next => PageIndex + 1 < TotalPagesCount;
+        public bool Next => PageIndex + 1 <= TotalPagesCount;
         public bool Previous => PageIndex > 1;
         public ICollection<T> Items { get; set; }
     }
