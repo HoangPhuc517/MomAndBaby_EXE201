@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity.Data;
 using MomAndBaby.Repositories.Entities;
+using MomAndBaby.Repositories.Helpers;
 using MomAndBaby.Services.DTO.UserModel;
 
 namespace MomAndBaby.Services.Mapping
@@ -17,6 +18,10 @@ namespace MomAndBaby.Services.Mapping
             CreateMap<User, RegisterCustomerDTO>().ReverseMap();
             CreateMap<User, RegisterExpertDTO>().ReverseMap();
             CreateMap<ExpertDTO, Expert>().ReverseMap();
+            CreateMap<User, UserViewModel>().ReverseMap();
+            CreateMap<Expert, ExpertViewModel>().ReverseMap();
+            CreateMap<Pagination<User>, Pagination<UserViewModel>>().ReverseMap();
+            CreateMap<User, UserUpdateDTO>().ReverseMap();
         }
     }
 }

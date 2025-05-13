@@ -21,6 +21,7 @@ namespace MomAndBaby.Services
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddScoped<IAccountService, AccountService>();
 
 
             //Config Coudinary
@@ -32,6 +33,7 @@ namespace MomAndBaby.Services
             );
             var cloudinary = new Cloudinary(account);
             services.AddSingleton(cloudinary);
+            services.AddScoped<UploadFile>();
 
             //Config AutoMapper
             services.AddAutoMapper(typeof(MappingProfile));

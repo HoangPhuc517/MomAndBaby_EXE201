@@ -104,12 +104,15 @@ namespace MomAndBaby.Repositories.Repositories
         public async Task<Pagination<T>> GetPaginationAsync(
             Expression<Func<T, bool>>? predicate = null,
             string? includeProperties = null,
-            int pageIndex = 0,
+            int pageIndex = 1,
             int pageSize = 10,
             Expression<Func<T, object>>? orderBy = null,
             bool isDescending = false
         )
         {
+            pageIndex = pageIndex <= 0 ? 1 : pageIndex;
+            pageSize = pageSize <= 0 ? 10 : pageSize;
+
             IQueryable<T> query = _dbSet;
             if (predicate != null)
                 query = query.Where(predicate);
