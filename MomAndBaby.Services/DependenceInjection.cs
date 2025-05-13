@@ -22,6 +22,7 @@ namespace MomAndBaby.Services
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IJournalService, JournalService>();
 
 
             //Config Coudinary
