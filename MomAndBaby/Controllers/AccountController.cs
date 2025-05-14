@@ -76,7 +76,7 @@ namespace MomAndBaby.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPagination(int _pageIndex, int _pageSize, string? _searchByFullName, bool _isDescending)
+        public async Task<IActionResult> GetPagination(int _pageIndex, int _pageSize, string? _searchByFullName, bool _isDescending, BaseEnum Status = BaseEnum.Active)
         {
             try
             {
@@ -85,7 +85,8 @@ namespace MomAndBaby.API.Controllers
                     pageSize: _pageSize,
                     fullName: _searchByFullName,
                     orderBy: null,
-                    isDescending: _isDescending
+                    isDescending: _isDescending,
+                    Status: Status
                 );
                 return Ok(result);
             }

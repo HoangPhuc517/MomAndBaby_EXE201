@@ -29,6 +29,7 @@ namespace MomAndBaby.Services.DTO.UserModel
         public string? Description { get; set; }
         public string Specialty { get; set; }
         public double? Stars { get; set; }
+        public string Status { get; set; }
     }
 
     public class UserUpdateDTO

@@ -90,14 +90,16 @@ namespace MomAndBaby.Services.Services
             string? fullName,
             string? orderBy,
             bool isDescending,
-            string? includeProperties = "Expert"
+            string? includeProperties = "Expert",
+            BaseEnum Status = BaseEnum.Active
             )
         {
             try
             {
                 var paginationUser = await _unitOfWork.GenericRepository<User>()
                     .GetPaginationAsync(
-                        predicate: string.IsNullOrEmpty(fullName) ? null : _ => _.FullName.Contains(fullName),
+                        predicate: _ => (string.IsNullOrEmpty(fullName) || _.FullName.Contains(fullName))
+                                && (_.Status == Status.ToString()),
                         pageIndex: pageIndex,
                         pageSize: pageSize,
                         isDescending: isDescending,

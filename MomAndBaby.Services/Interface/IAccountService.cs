@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using MomAndBaby.Core.Base;
 using MomAndBaby.Repositories.Entities;
 using MomAndBaby.Repositories.Helpers;
 using MomAndBaby.Services.DTO.UserModel;
@@ -22,7 +23,8 @@ namespace MomAndBaby.Services.Interface
             string? fullName,
             string? orderBy,
             bool isDescending,
-            string? includeProperties = "Expert"
+            string? includeProperties = "Expert",
+            BaseEnum Status = BaseEnum.Active
             );
     }
 }
