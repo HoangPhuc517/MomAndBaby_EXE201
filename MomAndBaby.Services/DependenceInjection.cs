@@ -23,6 +23,7 @@ namespace MomAndBaby.Services
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IJournalService, JournalService>();
+            services.AddScoped<IExpertService, ExpertService>();
 
 
             //Config Coudinary
