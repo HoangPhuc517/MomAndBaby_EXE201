@@ -10,6 +10,7 @@ namespace MomAndBaby.Core.Base
             Id = Guid.NewGuid();
             CreatedTime = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7));
             UpdatedTime = CreatedTime;
+            Status = BaseEnum.Active.ToString();
         }
 
         public Guid Id { get; set; }

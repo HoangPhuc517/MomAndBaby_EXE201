@@ -20,7 +20,7 @@ namespace MomAndBaby.Services.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICurrentUserService _currentUserService;
         private readonly UploadFile _hepperUploadImage;
-        public readonly IMapper _mapper;
+        private readonly IMapper _mapper;
 
         public AccountService(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, UploadFile hepperUploadImage, IMapper mapper)
         {

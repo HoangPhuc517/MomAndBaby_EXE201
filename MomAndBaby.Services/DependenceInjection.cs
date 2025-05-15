@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CloudinaryDotNet;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MomAndBaby.Services.BackgroundServices;
 using MomAndBaby.Services.Helpers;
 using MomAndBaby.Services.Interface;
 using MomAndBaby.Services.Mapping;
@@ -24,6 +25,8 @@ namespace MomAndBaby.Services
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IJournalService, JournalService>();
             services.AddScoped<IExpertService, ExpertService>();
+            services.AddScoped<IPackageService, PackageService>();
+            services.AddScoped<IDealService, DealService>();
 
 
             //Config Coudinary
@@ -42,6 +45,9 @@ namespace MomAndBaby.Services
 
             //Config MailSetting
             services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
+
+            //Config background services
+            services.AddHostedService<ExpiredDealProcessor>();
 
             return services;
         }
