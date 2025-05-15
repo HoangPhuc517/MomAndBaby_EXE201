@@ -7,8 +7,10 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity.Data;
 using MomAndBaby.Repositories.Entities;
 using MomAndBaby.Repositories.Helpers;
+using MomAndBaby.Services.DTO.DealModel;
 using MomAndBaby.Services.DTO.ExpertModel;
 using MomAndBaby.Services.DTO.JournalModel;
+using MomAndBaby.Services.DTO.ServicePackageModel;
 using MomAndBaby.Services.DTO.UserModel;
 
 namespace MomAndBaby.Services.Mapping
@@ -31,6 +33,17 @@ namespace MomAndBaby.Services.Mapping
             CreateMap<ExpertProfileViewModel, Expert>().ReverseMap();
             CreateMap<Pagination<Expert>, Pagination<ExpertProfileViewModel>>().ReverseMap();
             CreateMap<Expert, UpdateExpertModel>().ReverseMap();
+            CreateMap<ServicePackage, PackageModel>().ReverseMap();
+            CreateMap<Deal, PackageDealModel>().ReverseMap();
+            CreateMap<ServicePackage, PackageViewModel>().ReverseMap();
+            CreateMap<Deal, PackageDealViewModel>().ReverseMap();
+            CreateMap<Pagination<ServicePackage>, Pagination<PackageViewModel>>().ReverseMap();
+            CreateMap<ServicePackage, UpdatePackageModel>().ReverseMap();
+            CreateMap<Deal, CreateDealModel>()
+                .ForMember(dest => dest.ServicePackageId, opt => opt.MapFrom(src => src.ServicePackageId.ToString()))
+                .ReverseMap()
+                .ForMember(dest => dest.ServicePackageId, opt => opt.MapFrom(src => Guid.Parse(src.ServicePackageId)));
+            CreateMap<Deal, UpdateDealModel>().ReverseMap();
         }
     }
 }

@@ -10,9 +10,13 @@ namespace MomAndBaby.API.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IExpertService _expertService;
-        public AdminController(IExpertService expertService)
+        private readonly IPackageService _packageService;
+        private readonly IDealService _dealService;
+        public AdminController(IExpertService expertService, IPackageService packageService, IDealService dealService)
         {
             _expertService = expertService;
+            _packageService = packageService;
+            _dealService = dealService;
         }
 
         [HttpPut("expert/{id}")]
@@ -22,6 +26,42 @@ namespace MomAndBaby.API.Controllers
             {
                 var result = await _expertService.UpdateStatusExpert(id, status);
                 return Ok(result);
+            }
+            catch (BaseException ex)
+            {
+                return StatusCode(ex.ErrorCode, ex.ErrorMessage);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPut("package/{id}")]
+        public async Task<IActionResult> UpdatePackage(string id, BaseEnum status)
+        {
+            try
+            {
+                await _packageService.UpdateStatusPackage(id, status);
+                return Ok("Successfull.");
+            }
+            catch (BaseException ex)
+            {
+                return StatusCode(ex.ErrorCode, ex.ErrorMessage);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPut("deal/{id}")]
+        public async Task<IActionResult> UpdateDeal(string id, BaseEnum status)
+        {
+            try
+            {
+                await _dealService.UpdateStatusDeal(id, status);
+                return Ok("Successfull.");
             }
             catch (BaseException ex)
             {
