@@ -11,7 +11,9 @@ using MomAndBaby.Services.DTO.DealModel;
 using MomAndBaby.Services.DTO.ExpertModel;
 using MomAndBaby.Services.DTO.JournalModel;
 using MomAndBaby.Services.DTO.ServicePackageModel;
+using MomAndBaby.Services.DTO.TransactionModel;
 using MomAndBaby.Services.DTO.UserModel;
+using MomAndBaby.Services.DTO.UserPackageModel;
 
 namespace MomAndBaby.Services.Mapping
 {
@@ -44,6 +46,11 @@ namespace MomAndBaby.Services.Mapping
                 .ReverseMap()
                 .ForMember(dest => dest.ServicePackageId, opt => opt.MapFrom(src => Guid.Parse(src.ServicePackageId)));
             CreateMap<Deal, UpdateDealModel>().ReverseMap();
+            CreateMap<ServicePackage, SubPackageViewModel>().ReverseMap();
+            CreateMap<UserPackage, UserPackageViewModel>().ReverseMap();
+            CreateMap<Transaction, TransactionViewModel>().ReverseMap();
+            CreateMap<Transaction, CreateTransactionDTO>().ReverseMap();
+            CreateMap<Pagination<Transaction>, Pagination<TransactionViewModel>>().ReverseMap();
         }
     }
 }
