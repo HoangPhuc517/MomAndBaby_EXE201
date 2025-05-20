@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MomAndBaby.Core.Base;
 using MomAndBaby.Services.DTO.JournalModel;
@@ -15,6 +16,7 @@ namespace MomAndBaby.API.Controllers
         {
             _journalService = journalService;
         }
+
 
         [HttpPost]
         public async Task<IActionResult> CreateJournal(JournalDto journalDto)

@@ -27,6 +27,9 @@ namespace MomAndBaby.Services
             services.AddScoped<IExpertService, ExpertService>();
             services.AddScoped<IPackageService, PackageService>();
             services.AddScoped<IDealService, DealService>();
+            services.AddScoped<IUserPackageService, UserPackageService>();
+            services.AddScoped<IVnPayService, VnPayService>();
+            services.AddScoped<ITransactionService, TransactionService>();
 
 
             //Config Coudinary

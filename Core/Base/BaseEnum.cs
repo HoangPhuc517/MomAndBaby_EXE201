@@ -6,5 +6,7 @@
         Active,
         Deleted,
         Pending,
+        Success,
+        Failed,
     }
 }

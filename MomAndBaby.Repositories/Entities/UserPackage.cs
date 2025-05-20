@@ -10,7 +10,7 @@ namespace MomAndBaby.Repositories.Entities
     {
         public DateTimeOffset ExpiryDate { get; set; }
         public int ValidMonths { get; set; }
-        public int UsageCount { get; set; }
+        public int? UsageCount { get; set; }
         public Guid UserId { get; set; }
         public Guid ServicePackageId { get; set; }
         public virtual User User { get; set; }

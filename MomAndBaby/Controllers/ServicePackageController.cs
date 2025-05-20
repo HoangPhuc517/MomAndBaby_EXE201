@@ -12,11 +12,11 @@ namespace MomAndBaby.API.Controllers
 {
     [Route("api/service-package")]
     [ApiController]
-    public class ServicePackageContronller : ControllerBase
+    public class ServicePackageController : ControllerBase
     {
         private readonly IPackageService _packageService;
         private readonly IDealService _dealService;
-        public ServicePackageContronller(IPackageService packageService, IDealService dealService)
+        public ServicePackageController(IPackageService packageService, IDealService dealService)
         {
             _packageService = packageService;
             _dealService = dealService;
@@ -129,5 +129,7 @@ namespace MomAndBaby.API.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+
     }
 }

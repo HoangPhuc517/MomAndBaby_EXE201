@@ -20,7 +20,7 @@ namespace MomAndBaby.API.Controllers
             _currentUserService = currentUserService;
         }
 
-        [HttpPut("/avatar")]
+        [HttpPut("avatar")]
         public async Task<IActionResult> UpdateAvatar(IFormFile file)
         {
             try

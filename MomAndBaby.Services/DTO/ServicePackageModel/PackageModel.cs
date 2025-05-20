@@ -13,6 +13,7 @@ namespace MomAndBaby.Services.DTO.ServicePackageModel
         public string Description { get; set; }
         public string Image { get; set; }
         public decimal Price { get; set; }
+        public int? MonthlyUsageLimit { get; set; }
         public virtual ICollection<PackageDealModel> Deals { get; set; } = new List<PackageDealModel>();
     }
 
@@ -23,7 +24,7 @@ namespace MomAndBaby.Services.DTO.ServicePackageModel
         public string? Image { get; set; }
         public double DiscountRate { get; set; }
         public DateTimeOffset EndDate { get; set; }
-        public string OfferConditions { get; set; }
+        public int OfferConditions { get; set; }
     }
 
 
@@ -37,6 +38,7 @@ namespace MomAndBaby.Services.DTO.ServicePackageModel
         public string Image { get; set; }
         public decimal Price { get; set; }
         public string Status { get; set; }
+        public int? MonthlyUsageLimit { get; set; }
         public virtual ICollection<PackageDealViewModel> Deals { get; set; } = new List<PackageDealViewModel>();
     }
 
@@ -50,7 +52,7 @@ namespace MomAndBaby.Services.DTO.ServicePackageModel
         public string? Image { get; set; }
         public double DiscountRate { get; set; }
         public DateTimeOffset EndDate { get; set; }
-        public string OfferConditions { get; set; }
+        public int OfferConditions { get; set; }
         public string Status { get; set; }
     }
 
@@ -59,5 +61,6 @@ namespace MomAndBaby.Services.DTO.ServicePackageModel
         public string Description { get; set; }
         public string Image { get; set; }
         public decimal Price { get; set; }
+        public int? MonthlyUsageLimit { get; set; }
     }
 }

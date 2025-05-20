@@ -13,7 +13,7 @@ namespace MomAndBaby.Services.DTO.DealModel
         public string? Image { get; set; }
         public double DiscountRate { get; set; }
         public DateTimeOffset EndDate { get; set; }
-        public string OfferConditions { get; set; }
+        public int OfferConditions { get; set; }
         public string ServicePackageId { get; set; }
     }
 
@@ -23,6 +23,6 @@ namespace MomAndBaby.Services.DTO.DealModel
         public string? Image { get; set; }
         public double DiscountRate { get; set; }
         public DateTimeOffset EndDate { get; set; }
-        public string OfferConditions { get; set; }
+        public int OfferConditions { get; set; }
     }
 }

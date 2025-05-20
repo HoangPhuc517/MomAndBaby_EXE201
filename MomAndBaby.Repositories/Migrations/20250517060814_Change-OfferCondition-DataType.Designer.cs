@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MomAndBaby.Repositories.ConfigContext;
 
@@ -11,9 +12,11 @@ using MomAndBaby.Repositories.ConfigContext;
 namespace MomAndBaby.Repositories.Migrations
 {
     [DbContext(typeof(MBContext))]
-    partial class MBContextModelSnapshot : ModelSnapshot
+    [Migration("20250517060814_Change-OfferCondition-DataType")]
+    partial class ChangeOfferConditionDataType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -646,9 +649,6 @@ namespace MomAndBaby.Repositories.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MonthlyUsageLimit")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -830,7 +830,7 @@ namespace MomAndBaby.Repositories.Migrations
                     b.Property<DateTimeOffset>("UpdatedTime")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("UsageCount")
+                    b.Property<int>("UsageCount")
                         .HasColumnType("int");
 
                     b.Property<Guid>("UserId")
