@@ -30,14 +30,18 @@ namespace MomAndBaby.Services.Services
             await _unitOfWork.BeginTransactionAsync();
             try
             {
-                var userPackage = await _unitOfWork.GenericRepository<UserPackage>()
-                                                   .GetFirstOrDefaultAsync(_ => _.Id.ToString() == model.UserPackageId);
+                if (model.Status == BaseEnum.Success.ToString())
+                {
+                    var userPackage = await _unitOfWork.GenericRepository<UserPackage>()
+                                   .GetFirstOrDefaultAsync(_ => _.Id.ToString() == model.UserPackageId);
 
-                if (userPackage is null) throw new BaseException(StatusCodes.Status404NotFound, "User package not found");
+                    if (userPackage is null) throw new BaseException(StatusCodes.Status404NotFound, "User package not found");
 
-                userPackage.UpdatedTime = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7));
-                userPackage.Status = BaseEnum.Active.ToString();
-                _unitOfWork.GenericRepository<UserPackage>().Update(userPackage);
+
+                    userPackage.UpdatedTime = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7));
+                    userPackage.Status = BaseEnum.Active.ToString();
+                    _unitOfWork.GenericRepository<UserPackage>().Update(userPackage);
+                }
 
                 var transaction = _mapper.Map<Transaction>(model);
                 transaction.UpdatedTime = transaction.CreatedTime;
