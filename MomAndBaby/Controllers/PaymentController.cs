@@ -71,5 +71,41 @@ namespace MomAndBaby.API.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpGet("transaction/fillter")]
+        public async Task<IActionResult> GetTransactionByPaging(int pageIndex, int pageSize, string? stringSearch, DateTime? startDate, DateTime? endDate, bool isDescending, string? userId)
+        {
+            try
+            {
+                var transactions = await _transactionService.GetTransactionByPaging(pageIndex, pageSize, stringSearch, startDate, endDate, isDescending, userId);
+                return Ok(transactions);
+            }
+            catch (BaseException ex)
+            {
+                return StatusCode(ex.ErrorCode, ex.ErrorMessage);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("transaction/{id}")]
+        public async Task<IActionResult> GetTransactionById(string id)
+        {
+            try
+            {
+                var transaction = await _transactionService.GetTransactionById(id);
+                return Ok(transaction);
+            }
+            catch (BaseException ex)
+            {
+                return StatusCode(ex.ErrorCode, ex.ErrorMessage);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }
