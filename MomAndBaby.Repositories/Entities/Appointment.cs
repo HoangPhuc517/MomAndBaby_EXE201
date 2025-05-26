@@ -11,6 +11,8 @@
         public Guid ExpertId { get; set; }
         public Guid? FeebackId { get; set; }
         public Guid? JournalId { get; set; }
+        public Guid TimeSlotId { get; set; }
+        public virtual TimeSlot TimeSlot { get; set; }
         public virtual User Customer { get; set; }
         public virtual Expert Expert { get; set; }
         public virtual Feedback Feedback { get; set; }
