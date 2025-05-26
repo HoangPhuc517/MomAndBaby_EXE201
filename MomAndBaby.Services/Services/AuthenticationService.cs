@@ -129,9 +129,9 @@ namespace MomAndBaby.Services.Services
                     bool roleExist = await _roleManager.RoleExistsAsync(UserRoleEnum.EXPERT.ToString());
                     if (!roleExist)
                     {
-                        await _roleManager.CreateAsync(new IdentityRole<Guid> { Name = UserRoleEnum.CUSTOMER.ToString() });
+                        await _roleManager.CreateAsync(new IdentityRole<Guid> { Name = UserRoleEnum.EXPERT.ToString() });
                     }
-                    await _userManager.AddToRoleAsync(userDb, UserRoleEnum.CUSTOMER.ToString());
+                    await _userManager.AddToRoleAsync(userDb, UserRoleEnum.EXPERT.ToString());
                     await _emailService.SendMailRegister(userDb.Email);
 
                 }

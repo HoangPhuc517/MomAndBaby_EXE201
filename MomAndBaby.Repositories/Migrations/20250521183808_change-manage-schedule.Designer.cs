@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MomAndBaby.Repositories.ConfigContext;
 
@@ -11,9 +12,11 @@ using MomAndBaby.Repositories.ConfigContext;
 namespace MomAndBaby.Repositories.Migrations
 {
     [DbContext(typeof(MBContext))]
-    partial class MBContextModelSnapshot : ModelSnapshot
+    [Migration("20250521183808_change-manage-schedule")]
+    partial class changemanageschedule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -192,9 +195,6 @@ namespace MomAndBaby.Repositories.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("TimeSlotId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -209,8 +209,6 @@ namespace MomAndBaby.Repositories.Migrations
                     b.HasIndex("ExpertId");
 
                     b.HasIndex("JournalId");
-
-                    b.HasIndex("TimeSlotId");
 
                     b.ToTable("Appointments", (string)null);
                 });
@@ -679,6 +677,9 @@ namespace MomAndBaby.Repositories.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("AppointmentId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTimeOffset>("CreatedTime")
                         .HasColumnType("datetimeoffset");
 
@@ -694,6 +695,9 @@ namespace MomAndBaby.Repositories.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppointmentId")
+                        .IsUnique();
 
                     b.ToTable("TimeSlot");
                 });
@@ -948,19 +952,11 @@ namespace MomAndBaby.Repositories.Migrations
                         .HasForeignKey("JournalId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("MomAndBaby.Repositories.Entities.TimeSlot", "TimeSlot")
-                        .WithMany("Appointments")
-                        .HasForeignKey("TimeSlotId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Customer");
 
                     b.Navigation("Expert");
 
                     b.Navigation("Journal");
-
-                    b.Navigation("TimeSlot");
                 });
 
             modelBuilder.Entity("MomAndBaby.Repositories.Entities.Blog", b =>
@@ -1134,6 +1130,17 @@ namespace MomAndBaby.Repositories.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("MomAndBaby.Repositories.Entities.TimeSlot", b =>
+                {
+                    b.HasOne("MomAndBaby.Repositories.Entities.Appointment", "Appointment")
+                        .WithOne("TimeSlot")
+                        .HasForeignKey("MomAndBaby.Repositories.Entities.TimeSlot", "AppointmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Appointment");
+                });
+
             modelBuilder.Entity("MomAndBaby.Repositories.Entities.Transaction", b =>
                 {
                     b.HasOne("MomAndBaby.Repositories.Entities.User", "User")
@@ -1170,6 +1177,9 @@ namespace MomAndBaby.Repositories.Migrations
                         .IsRequired();
 
                     b.Navigation("Reports");
+
+                    b.Navigation("TimeSlot")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MomAndBaby.Repositories.Entities.Blog", b =>
@@ -1206,11 +1216,6 @@ namespace MomAndBaby.Repositories.Migrations
                     b.Navigation("Deals");
 
                     b.Navigation("UserPackages");
-                });
-
-            modelBuilder.Entity("MomAndBaby.Repositories.Entities.TimeSlot", b =>
-                {
-                    b.Navigation("Appointments");
                 });
 
             modelBuilder.Entity("MomAndBaby.Repositories.Entities.User", b =>

@@ -59,7 +59,13 @@ namespace MomAndBaby.Core.Store
         /// <summary>
         /// Đang chờ
         /// </summary>
-        Pending = 2
+        Pending = 2,
+
+        ///<summary>
+        ///Đã Duyệt
+        /// </summary>
+        Approved = 3,
+
     }
 
 }

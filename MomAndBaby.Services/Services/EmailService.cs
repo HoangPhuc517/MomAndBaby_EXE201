@@ -12,6 +12,7 @@ using MailKit;
 using MomAndBaby.Services.Interface;
 using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.WebUtilities;
+using MomAndBaby.Repositories.Entities;
 
 namespace MomAndBaby.Services.Services
 {
@@ -84,7 +85,39 @@ namespace MomAndBaby.Services.Services
         }
 
 
+        public async Task SendMailAppointmentNotification(Appointment model, string email)
+        {
+            var emailToSend = new MimeMessage();
+            emailToSend.From.Add(new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Mail));
+            emailToSend.To.Add(MailboxAddress.Parse(email));
+            emailToSend.Subject = _mailSettings.DisplayName;
+
+            var timeString = model.AppointmentDate.Date.ToString("dd/MM/yyyy") + " " + model.TimeSlot.Time.ToString();
+            var meetLink = model.LinkMeet;
+            if (string.IsNullOrEmpty(meetLink))
+            {
+                meetLink = "";
+            }
+            string htmlBody = GetHtmlContentAppointmentNotification(timeString, model.Type, meetLink, model.Place, model.Status);
+
+            emailToSend.Body = new TextPart(TextFormat.Html)
+            {
+                Text = htmlBody
+            };
+
+            using (var emailClient = new SmtpClient())
+            {
+                emailClient.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
+                emailClient.Authenticate(_mailSettings.Mail, _mailSettings.Password);
+                emailClient.Send(emailToSend);
+                emailClient.Disconnect(true);
+            }
+        }
+
+
         #region HTML Content
+
+        #region Confirm Email
         public static string GetHtmlContentConfirmEmail(string url)
         {
             return $@"
@@ -186,7 +219,10 @@ namespace MomAndBaby.Services.Services
         </body>
         </html>";
         }
+        #endregion
 
+
+        #region Mail Forgot Password
         public static string GetHtmlContentForgotPassword(string url)
         {
             return $@"
@@ -288,6 +324,106 @@ namespace MomAndBaby.Services.Services
         </body>
         </html>";
         }
+        #endregion
+
+        #region Mail Appointment Notification
+        public static string GetHtmlContentAppointmentNotification(string time, string type, string meetLink, string place, string status)
+        {
+            return $@"
+<!DOCTYPE html>
+<html lang=""en"">
+<head>
+    <meta charset=""UTF-8"">
+    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+    <title>Appointment Notification</title>
+    <style>
+        body {{
+            background-color: #f3f4f6;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }}
+
+        .wrap {{
+            display: flex;
+            width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }}
+
+        .email-container {{
+            background-color: #ffffff;
+            max-width: 500px;
+            padding: 25px;
+            text-align: center;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+        }}
+
+        .logo {{
+            width: 100px;
+            margin-bottom: 20px;
+        }}
+
+        .title {{
+            font-size: 26px;
+            color: #2196f3;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }}
+
+        .message {{
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 25px;
+        }}
+
+        .meet-link:hover {{
+            background: linear-gradient(135deg, #0288D1, #0277BD);
+            transform: scale(1.05);
+        }}
+
+        .footer {{
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777;
+        }}
+
+        .footer p {{
+            margin: 5px 0;
+        }}
+    </style>
+</head>
+<body>
+    <div class=""wrap"">
+        <div class=""email-container"">
+            <img class=""logo"" src=""https://img.icons8.com/?size=100&id=jR1AszI10KPn&format=png&color=000000"" alt=""Appointment"">
+            <div class=""title"">Appointment Reminder 📅</div>
+            <div class=""message"">
+                You have an upcoming <strong>{type}</strong> appointment.<br><br>
+                <strong>🕒 Time:</strong> {time}<br>
+                <strong>📍 Place:</strong> {place}<br>
+                <strong>📌 Status:</strong> {status}<br>
+                <strong>🔗 Link:</strong> <a href=""{meetLink}"">{meetLink}</a>
+            </div>
+            <hr>
+            <div class=""footer"">
+                <p>🏫 FPT University</p>
+                <p>📍 Lô E2a-7, Đường D1, Long Thạnh Mỹ, Thành Phố Thủ Đức, Hồ Chí Minh</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>";
+        }
+
+        #endregion
+
+
         #endregion
     }
 }

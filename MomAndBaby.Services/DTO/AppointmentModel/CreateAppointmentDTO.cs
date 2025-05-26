@@ -14,7 +14,17 @@ namespace MomAndBaby.Services.DTO.AppointmentModel
         public DateTimeOffset AppointmentDate { get; set; }
         public string Place { get; set; }
         public string? LinkMeet { get; set; }
+        public Guid TimeSlotId { get; set; }
         public Guid CustomerId { get; set; }
         public Guid ExpertId { get; set; }
+    }
+
+    public class CreateTimeSlotDTO
+    {
+        /// <summary>
+        /// HH:mm
+        /// </summary>
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
     }
 }

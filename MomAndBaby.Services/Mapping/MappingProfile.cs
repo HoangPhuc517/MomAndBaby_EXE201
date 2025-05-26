@@ -5,8 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity.Data;
+using MomAndBaby.Core.Store;
 using MomAndBaby.Repositories.Entities;
 using MomAndBaby.Repositories.Helpers;
+using MomAndBaby.Services.DTO.AppointmentModel;
 using MomAndBaby.Services.DTO.DealModel;
 using MomAndBaby.Services.DTO.ExpertModel;
 using MomAndBaby.Services.DTO.JournalModel;
@@ -51,6 +53,17 @@ namespace MomAndBaby.Services.Mapping
             CreateMap<Transaction, TransactionViewModel>().ReverseMap();
             CreateMap<Transaction, CreateTransactionDTO>().ReverseMap();
             CreateMap<Pagination<Transaction>, Pagination<TransactionViewModel>>().ReverseMap();
+            CreateMap<Appointment, AppointmentViewModel>()
+                .ForMember(dest => dest.TimeSlot, opt => opt.MapFrom(src => src.TimeSlot.Time))
+                .ForMember(dest => dest.ReportCount, opt => opt.MapFrom(src => src.Reports.Count()))
+                .ReverseMap();
+            CreateMap<Feedback, FeedbackAppointmentVM>().ReverseMap();
+            CreateMap<Pagination<Appointment>, Pagination<AppointmentViewModel>>()
+                .ReverseMap();
+            CreateMap<Appointment, CreateAppointmentDTO>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => Enum.Parse<AppointmentTypeEnum>(src.Type)))
+                .ReverseMap()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToString()));
         }
     }
 }
