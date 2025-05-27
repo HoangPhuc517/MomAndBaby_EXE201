@@ -257,7 +257,7 @@ namespace MomAndBaby.Services.Services
 
                 AppointmentHelper.CheckValidUserUpdateAppointment(roleCurrentUser, statusEnum);
 
-                AppointmentHelper.CheckIsCancelAppointment(appointment);
+                AppointmentHelper.CheckIsCancelCompleteAppointment(appointment);
 
 
                 if (userId == appointment.CustomerId.ToString() || user.Expert?.Id == appointment.ExpertId)

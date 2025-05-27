@@ -25,7 +25,7 @@ namespace MomAndBaby.Repositories.ConfigContext.EntityConfig
                 .IsRequired();
 
             builder.Property(e => e.Stars)
-                .HasColumnType("decimal(1,1)");
+                .HasColumnType("decimal(3,2)");
 
             builder.HasOne(e => e.User)
                 .WithOne(e => e.Expert)

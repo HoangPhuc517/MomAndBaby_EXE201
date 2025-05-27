@@ -68,6 +68,7 @@ namespace MomAndBaby.Services.Mapping
             CreateMap<RegisterAdminDTO, User>().ReverseMap();
             CreateMap<Feedback, FeedbackViewModel>().ReverseMap();
             CreateMap<Feedback, CreateFeedbackDTO>().ReverseMap();
+            CreateMap<Pagination<Feedback>, Pagination<FeedbackViewModel>>().ReverseMap();
         }
     }
 }
