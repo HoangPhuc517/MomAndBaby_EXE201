@@ -21,11 +21,12 @@ namespace MomAndBaby.Services.Helpers
             }
         }
 
-        public static void CheckIsCancelAppointment(Appointment appointment)
+        public static void CheckIsCancelCompleteAppointment(Appointment appointment)
         {
-            if (appointment.Status == AppointmentStatusEnum.Canceled.ToString())
+            if (appointment.Status == AppointmentStatusEnum.Canceled.ToString() 
+             || appointment.Status == AppointmentStatusEnum.Completed.ToString())
             {
-                throw new BaseException(StatusCodes.Status400BadRequest, "Appointment has already been canceled");
+                throw new BaseException(StatusCodes.Status400BadRequest, "Appointment has already been canceled or Completed!!!");
             }
         }
 

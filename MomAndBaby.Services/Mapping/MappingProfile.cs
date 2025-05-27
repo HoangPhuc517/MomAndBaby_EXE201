@@ -11,6 +11,7 @@ using MomAndBaby.Repositories.Helpers;
 using MomAndBaby.Services.DTO.AppointmentModel;
 using MomAndBaby.Services.DTO.DealModel;
 using MomAndBaby.Services.DTO.ExpertModel;
+using MomAndBaby.Services.DTO.FeedbackModel;
 using MomAndBaby.Services.DTO.JournalModel;
 using MomAndBaby.Services.DTO.ServicePackageModel;
 using MomAndBaby.Services.DTO.TransactionModel;
@@ -65,6 +66,9 @@ namespace MomAndBaby.Services.Mapping
                 .ReverseMap()
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToString()));
             CreateMap<RegisterAdminDTO, User>().ReverseMap();
+            CreateMap<Feedback, FeedbackViewModel>().ReverseMap();
+            CreateMap<Feedback, CreateFeedbackDTO>().ReverseMap();
+            CreateMap<Pagination<Feedback>, Pagination<FeedbackViewModel>>().ReverseMap();
         }
     }
 }
