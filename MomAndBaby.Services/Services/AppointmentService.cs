@@ -252,6 +252,13 @@ namespace MomAndBaby.Services.Services
                 var user = await _unitOfWork.GenericRepository<User>()
                                             .GetFirstOrDefaultAsync(_ => _.Id.ToString() == userId,
                                                                             "Expert");
+                var roleCurrentUsers = await _userManager.GetRolesAsync(user);
+                var roleCurrentUser = roleCurrentUsers.FirstOrDefault();
+
+                AppointmentHelper.CheckValidUserUpdateAppointment(roleCurrentUser, statusEnum);
+
+                AppointmentHelper.CheckIsCancelAppointment(appointment);
+
 
                 if (userId == appointment.CustomerId.ToString() || user.Expert?.Id == appointment.ExpertId)
                 {
