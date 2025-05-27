@@ -64,6 +64,7 @@ namespace MomAndBaby.Services.Mapping
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => Enum.Parse<AppointmentTypeEnum>(src.Type)))
                 .ReverseMap()
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToString()));
+            CreateMap<RegisterAdminDTO, User>().ReverseMap();
         }
     }
 }

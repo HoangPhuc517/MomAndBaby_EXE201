@@ -31,6 +31,7 @@ namespace MomAndBaby.Services
             services.AddScoped<IVnPayService, VnPayService>();
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<IAppointmentService, AppointmentService>();
+            services.AddScoped<IFeedbackService, FeedbackService>();
 
 
             //Config Coudinary

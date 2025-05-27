@@ -12,6 +12,7 @@ namespace MomAndBaby.Services.Interface
         Task<AuthenResponse> LoginAsync(LoginRequest model);
         Task<string> RegisterCustomerAsync(RegisterCustomerDTO model);
         Task<string> RegisterExpertAsync(RegisterExpertDTO model);
+        Task<string> RegisterAdminAsync(RegisterAdminDTO model);
         Task ConfirmEmail(string email);
         Task LogoutAsync();
         Task ResetPassword(string email, string token, string newPassword);

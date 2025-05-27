@@ -152,6 +152,62 @@ namespace MomAndBaby.Services.Services
             }
         }
 
+        public async Task<string> RegisterAdminAsync(RegisterAdminDTO model)
+        {
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null)
+                {
+                    throw new BaseException(StatusCodes.Status409Conflict, "Email already exists");
+                }
+                user = await _userManager.FindByNameAsync(model.UserName);
+                if (user != null)
+                {
+                    throw new BaseException(StatusCodes.Status409Conflict, "Username already exists");
+                }
+                if (await _userManager.Users.AnyAsync(u => u.PhoneNumber == model.PhoneNumber))
+                {
+                    throw new BaseException(StatusCodes.Status409Conflict, "Phone number already exists");
+                }
+
+                var userDb = _mapper.Map<User>(model);
+                userDb.Status = BaseEnum.Active.ToString();
+                userDb.CreatedTime = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7));
+                userDb.UpdatedTime = userDb.CreatedTime;
+
+                var result = await _userManager.CreateAsync(userDb, model.Password);
+
+                if (result.Succeeded)
+                {
+                    bool roleExist = await _roleManager.RoleExistsAsync(UserRoleEnum.ADMIN.ToString());
+                    if (!roleExist)
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole<Guid> { Name = UserRoleEnum.ADMIN.ToString() });
+                    }
+                    await _userManager.AddToRoleAsync(userDb, UserRoleEnum.ADMIN.ToString());
+
+                    await _emailService.SendMailRegister(userDb.Email);
+
+                }
+                else
+                {
+                    var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                    throw new BaseException(StatusCodes.Status400BadRequest, errors);
+                }
+
+                await _unitOfWork.SaveChangeAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return userDb.Id.ToString();
+            }
+            catch
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw;
+            }
+        }
+
         public async Task<AuthenResponse> LoginAsync(LoginRequest model)
         {
             try

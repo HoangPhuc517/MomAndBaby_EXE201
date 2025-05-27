@@ -87,6 +87,27 @@ namespace MomAndBaby.API.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpPost("register/admin")]
+        public async Task<IActionResult> RegisterAdmin([FromBody] RegisterAdminDTO request)
+        {
+            try
+            {
+                var result = await _authenticationService.RegisterAdminAsync(request);
+                if (result == null)
+                {
+                    throw new Exception("Register fail!!!");
+                }
+                return Ok(result);
+            }
+            catch (BaseException ex)
+            {
+                return StatusCode(ex.ErrorCode, ex.ErrorMessage);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
 
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken(string refreshToken)
