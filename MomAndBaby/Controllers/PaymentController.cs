@@ -60,7 +60,7 @@ namespace MomAndBaby.API.Controllers
             {
                 var createTransactionDTO = _vnPayService.ProcessVNPayResponse(Request.Query);
                 await _transactionService.CreateTransaction(createTransactionDTO);
-                return Redirect("https://www.facebook.com/duong.hoai.ngan.2024");
+                return Ok(true);
             }
             catch (BaseException ex)
             {
