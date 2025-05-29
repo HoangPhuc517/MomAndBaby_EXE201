@@ -1,4 +1,4 @@
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using MomAndBaby.API;
 using MomAndBaby.Repositories;
@@ -55,11 +55,12 @@ internal class Program
         }
 
         // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
             app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "MomAndBaby API V1");
+                c.RoutePrefix = string.Empty; // Hiển thị Swagger tại `/`
+            });
 
         app.UseHealthChecks("/health");
 
