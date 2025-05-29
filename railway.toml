@@ -1,0 +1,9 @@
+[build]
+builder = "dockerfile"
+dockerfilePath="./MomAndBaby/Dockerfile"
+
+[deploy]
+startCommand = "dotnet MomAndBaby.API.dll"
+restartPolicyType = "always"
+healthcheckPath = "/health"
+healthcheckTimeout = 120
