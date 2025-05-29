@@ -11,6 +11,10 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        // Configure Docker
+        var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+        builder.WebHost.UseUrls($"http://*:{port}");
+
         // Add services to the container.
 
         #region MyConfiguration
@@ -55,6 +59,8 @@ internal class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
+        app.UseHealthChecks("/health");
 
         app.UseCors("AllowSpecificOrigins");
 
