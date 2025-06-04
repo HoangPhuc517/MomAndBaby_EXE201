@@ -32,6 +32,7 @@ namespace MomAndBaby.Services
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<IAppointmentService, AppointmentService>();
             services.AddScoped<IFeedbackService, FeedbackService>();
+            services.AddScoped<IBlogService, BlogService>();
 
 
             //Config Coudinary

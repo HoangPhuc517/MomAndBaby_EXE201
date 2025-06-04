@@ -9,6 +9,7 @@ using MomAndBaby.Core.Store;
 using MomAndBaby.Repositories.Entities;
 using MomAndBaby.Repositories.Helpers;
 using MomAndBaby.Services.DTO.AppointmentModel;
+using MomAndBaby.Services.DTO.BlogModel;
 using MomAndBaby.Services.DTO.DealModel;
 using MomAndBaby.Services.DTO.ExpertModel;
 using MomAndBaby.Services.DTO.FeedbackModel;
@@ -69,6 +70,12 @@ namespace MomAndBaby.Services.Mapping
             CreateMap<Feedback, FeedbackViewModel>().ReverseMap();
             CreateMap<Feedback, CreateFeedbackDTO>().ReverseMap();
             CreateMap<Pagination<Feedback>, Pagination<FeedbackViewModel>>().ReverseMap();
+            CreateMap<Blog, CreateBlogModel>().ReverseMap();
+            CreateMap<Blog, ResponseBlogModel>().ReverseMap();
+            CreateMap<Pagination<Blog>, Pagination<ResponseBlogModel>>().ReverseMap();
+            CreateMap<Comment, CommentModel>().ReverseMap();
+            CreateMap<Like, LikeModel>().ReverseMap();
+            CreateMap<Report, ReportModel>().ReverseMap();
         }
     }
 }
