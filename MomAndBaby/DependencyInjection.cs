@@ -86,7 +86,7 @@ namespace MomAndBaby.API
                     OnMessageReceived = context =>
                     {
                         var path = context.HttpContext.Request.Path;
-                        if (path.StartsWithSegments("/chatHub") &&
+                        if ((path.StartsWithSegments("/chatHub") || path.StartsWithSegments("/notificationHub")) &&
                             context.Request.Query.TryGetValue("access_token", out var accessToken))
                         {
                             context.Token = accessToken.ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase).Trim();
