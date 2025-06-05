@@ -10,6 +10,7 @@ using MomAndBaby.Repositories.Entities;
 using MomAndBaby.Repositories.Helpers;
 using MomAndBaby.Services.DTO.AppointmentModel;
 using MomAndBaby.Services.DTO.BlogModel;
+using MomAndBaby.Services.DTO.ChatModel;
 using MomAndBaby.Services.DTO.DealModel;
 using MomAndBaby.Services.DTO.ExpertModel;
 using MomAndBaby.Services.DTO.FeedbackModel;
@@ -76,6 +77,8 @@ namespace MomAndBaby.Services.Mapping
             CreateMap<Comment, CommentModel>().ReverseMap();
             CreateMap<Like, LikeModel>().ReverseMap();
             CreateMap<Report, ReportModel>().ReverseMap();
+            CreateMap<ChatHub, ResponseChatHup>().ReverseMap();
+            CreateMap<ChatMessage, ResponseChatMessage>().ReverseMap();
         }
     }
 }
