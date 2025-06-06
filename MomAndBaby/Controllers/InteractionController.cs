@@ -40,7 +40,7 @@ namespace MomAndBaby.API.Controllers
             try
             {
                 var result = await _blogService.CreateCommentBlog(blogId, comment);
-                return Ok(result);
+                return Ok(new { result.Item1, result.Item2 });
             }
             catch (BaseException ex)
             {

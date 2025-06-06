@@ -99,5 +99,28 @@ namespace MomAndBaby.Services.Services
                 throw;
             }
         }
+
+        public async Task<List<TransactionViewModel>> GetTransactionByMonth(int month, int year, string? userId)
+        {
+            try
+            {
+                var startDate = new DateTime(year, month, 1);
+                var endDate = startDate.AddMonths(1);
+
+                var transactions = await _unitOfWork.GenericRepository<Transaction>()
+                    .GetAllAsync(filter: _ => _.CreatedTime >= startDate 
+                                              && _.CreatedTime < endDate 
+                                              && (string.IsNullOrEmpty(userId) || _.UserId.ToString() == userId),
+                                 includeProperties: null);
+                if (transactions is null) 
+                    throw new BaseException(StatusCodes.Status404NotFound, "Transaction not found for the specified month and year");
+                var transactionViewModels = _mapper.Map<List<TransactionViewModel>>(transactions);
+                return transactionViewModels;
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }
