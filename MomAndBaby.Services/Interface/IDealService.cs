@@ -14,5 +14,6 @@ namespace MomAndBaby.Services.Interface
         Task<PackageViewModel> CreateDeal(CreateDealModel dealModel);
         Task<PackageViewModel> UpdateDeal(string id, UpdateDealModel dealModel);
         Task UpdateStatusDeal(string id, BaseEnum statusEnum);
+        Task<List<DealViewModel>> GetDealAll();
     }
 }

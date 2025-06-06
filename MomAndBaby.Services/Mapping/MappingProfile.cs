@@ -51,6 +51,7 @@ namespace MomAndBaby.Services.Mapping
                 .ReverseMap()
                 .ForMember(dest => dest.ServicePackageId, opt => opt.MapFrom(src => Guid.Parse(src.ServicePackageId)));
             CreateMap<Deal, UpdateDealModel>().ReverseMap();
+            CreateMap<Deal, DealViewModel>().ReverseMap();
             CreateMap<ServicePackage, SubPackageViewModel>().ReverseMap();
             CreateMap<UserPackage, UserPackageViewModel>().ReverseMap();
             CreateMap<Transaction, TransactionViewModel>().ReverseMap();

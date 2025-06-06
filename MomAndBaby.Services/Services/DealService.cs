@@ -113,5 +113,22 @@ namespace MomAndBaby.Services.Services
                 throw;
             }
         }
+
+        public async Task<List<DealViewModel>> GetDealAll()
+        {
+            try
+            {
+                var deals = _unitOfWork.GenericRepository<Deal>()
+                                  .GetAll()
+                                  .OrderByDescending(_ => _.CreatedTime);
+                if (deals is null) throw new BaseException(StatusCodes.Status404NotFound, "Deal not found!!!");
+                var dealViewModels = _mapper.Map<List<DealViewModel>>(deals);
+                return dealViewModels;
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

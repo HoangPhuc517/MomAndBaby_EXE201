@@ -94,6 +94,24 @@ namespace MomAndBaby.API.Controllers
             }
         }
 
+        [HttpGet("deal")]
+        public async Task<IActionResult> GetDeals()
+        {
+            try
+            {
+                var result = await _dealService.GetDealAll();
+                return Ok(result);
+            }
+            catch (BaseException ex)
+            {
+                return StatusCode(ex.ErrorCode, ex.ErrorMessage);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
         [HttpPost("deal")]
         public async Task<IActionResult> CreateDeal([FromBody] CreateDealModel dealModel)
         {

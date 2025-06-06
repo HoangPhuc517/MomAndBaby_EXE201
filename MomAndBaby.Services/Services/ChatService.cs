@@ -38,7 +38,15 @@ namespace MomAndBaby.Services.Services
                 {
                     throw new BaseException(StatusCodes.Status409Conflict, "ChatHub name already exists");
                 }
-                var chatHup = new ChatHub
+
+                var checkdupl = await _unitOfWork.GenericRepository<ChatHub>()
+                    .GetFirstOrDefaultAsync(_ => (_.FirstUserId == Guid.Parse(currentUserId) && _.SecondUserId == secondUserId) ||
+                                                (_.FirstUserId == secondUserId && _.SecondUserId == Guid.Parse(currentUserId)));
+                if (checkdupl != null)
+                {
+                    throw new BaseException(StatusCodes.Status409Conflict, checkdupl.Id.ToString());
+                }
+                    var chatHup = new ChatHub
                 {
                     NameChatHub = nameChatHub,
                     FirstUserId = Guid.Parse(currentUserId),
