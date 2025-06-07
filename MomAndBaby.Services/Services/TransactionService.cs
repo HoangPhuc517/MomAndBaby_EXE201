@@ -57,6 +57,7 @@ namespace MomAndBaby.Services.Services
             }
         }
 
+
         public async Task<TransactionViewModel> GetTransactionById(string id)
         {
             try
@@ -108,17 +109,34 @@ namespace MomAndBaby.Services.Services
                 var endDate = startDate.AddMonths(1);
 
                 var transactions = await _unitOfWork.GenericRepository<Transaction>()
-                    .GetAllAsync(filter: _ => _.CreatedTime >= startDate 
-                                              && _.CreatedTime < endDate 
+                    .GetAllAsync(filter: _ => _.CreatedTime >= startDate
+                                              && _.CreatedTime < endDate
                                               && (string.IsNullOrEmpty(userId) || _.UserId.ToString() == userId),
                                  includeProperties: null);
-                if (transactions is null) 
+                if (transactions is null)
                     throw new BaseException(StatusCodes.Status404NotFound, "Transaction not found for the specified month and year");
                 var transactionViewModels = _mapper.Map<List<TransactionViewModel>>(transactions);
                 return transactionViewModels;
             }
             catch
             {
+                throw;
+            }
+        }
+
+        public async Task CreateTransaction2(CreateTransactionDTO model)
+        {
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                var transaction = _mapper.Map<Transaction>(model);
+                await _unitOfWork.GenericRepository<Transaction>().InsertAsync(transaction);
+                await _unitOfWork.SaveChangeAsync();
+                await _unitOfWork.CommitTransactionAsync();
+            }
+            catch
+            {
+                await _unitOfWork.RollbackTransactionAsync();
                 throw;
             }
         }

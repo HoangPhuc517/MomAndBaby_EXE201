@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 using CloudinaryDotNet;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using MomAndBaby.Services.BackgroundServices;
 using MomAndBaby.Services.Helpers;
 using MomAndBaby.Services.Interface;
 using MomAndBaby.Services.Mapping;
 using MomAndBaby.Services.Services;
+using Net.payOS;
 
 namespace MomAndBaby.Services
 {
@@ -34,6 +36,7 @@ namespace MomAndBaby.Services
             services.AddScoped<IFeedbackService, FeedbackService>();
             services.AddScoped<IBlogService, BlogService>();
             services.AddScoped<IChatService, ChatService>();
+            services.AddScoped<IPayOsService, PayOsService>();
 
 
             //Config Coudinary
@@ -43,9 +46,25 @@ namespace MomAndBaby.Services
                 cloudinarySettings["ApiKey"],
                 cloudinarySettings["ApiSecret"]
             );
+
             var cloudinary = new Cloudinary(account);
             services.AddSingleton(cloudinary);
             services.AddScoped<UploadFile>();
+
+            //Config PayOsSettings
+            services.Configure<PayOsSettings>(configuration.GetSection("PayOs"));
+
+            services.AddSingleton(sp =>
+            {
+                var settings = sp.GetRequiredService<IOptions<PayOsSettings>>().Value;
+                if (string.IsNullOrEmpty(settings.ClientID) ||
+                    string.IsNullOrEmpty(settings.APIKey) ||
+                    string.IsNullOrEmpty(settings.ChecksumKey))
+                {
+                    throw new InvalidOperationException("PayOS configuration is missing or incomplete");
+                }
+                return new PayOS(settings.ClientID, settings.APIKey, settings.ChecksumKey);
+            });
 
             //Config AutoMapper
             services.AddAutoMapper(typeof(MappingProfile));

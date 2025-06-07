@@ -8,6 +8,7 @@ namespace MomAndBaby.Core.Store
 {
     public enum TransactionTypeEnum
     {
-        VNPay
+        VNPay,
+        PayOs
     }
 }

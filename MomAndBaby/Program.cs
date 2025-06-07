@@ -11,6 +11,15 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
+        {
+            var env = hostingContext.HostingEnvironment;
+            config.SetBasePath(Directory.GetCurrentDirectory());
+            config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+            config.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+            config.AddEnvironmentVariables();
+        });
+
         // Add services to the container.
 
         #region MyConfiguration
@@ -21,11 +30,11 @@ internal class Program
         builder.Services.AddConfigurationRepositories();
 
         //Config appsettings when CICD
-        builder.Configuration
-                        .SetBasePath(Directory.GetCurrentDirectory())
-                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                        .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                        .AddEnvironmentVariables();
+        //builder.Configuration
+        //                .SetBasePath(Directory.GetCurrentDirectory())
+        //                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        //                .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+        //                .AddEnvironmentVariables();
 
         #endregion
 

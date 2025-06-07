@@ -13,6 +13,7 @@ namespace MomAndBaby.Repositories.Entities
         public int? UsageCount { get; set; }
         public Guid UserId { get; set; }
         public Guid ServicePackageId { get; set; }
+        public long? OrderCode { get; set; }
         public virtual User User { get; set; }
         public virtual ServicePackage ServicePackage { get; set; }
     }

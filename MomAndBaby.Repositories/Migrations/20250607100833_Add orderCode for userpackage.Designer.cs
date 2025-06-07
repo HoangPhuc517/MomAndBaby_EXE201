@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MomAndBaby.Repositories.ConfigContext;
 
@@ -11,9 +12,11 @@ using MomAndBaby.Repositories.ConfigContext;
 namespace MomAndBaby.Repositories.Migrations
 {
     [DbContext(typeof(MBContext))]
-    partial class MBContextModelSnapshot : ModelSnapshot
+    [Migration("20250607100833_Add orderCode for userpackage")]
+    partial class AddorderCodeforuserpackage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

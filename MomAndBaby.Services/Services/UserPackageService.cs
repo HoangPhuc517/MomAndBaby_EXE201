@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using MomAndBaby.Core.Base;
 using MomAndBaby.Repositories.Entities;
 using MomAndBaby.Repositories.Interface;
@@ -66,6 +67,11 @@ namespace MomAndBaby.Services.Services
                             $"This deal only applies to durations that are multiples of {deal.OfferConditions} months");
                     }
                 }
+                long orderCode;
+                do
+                {
+                    orderCode = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                } while (_unitOfWork.GenericRepository<UserPackage>().GetAll().Any(_ => _.OrderCode == orderCode));
 
                 var userPackage = new UserPackage()
                 {
@@ -75,9 +81,11 @@ namespace MomAndBaby.Services.Services
                                                .AddMonths(createUserPackage.MonthNumber),
                     ValidMonths = createUserPackage.MonthNumber,
                     UsageCount = package.MonthlyUsageLimit,
+                    OrderCode = orderCode,
                     UserId = Guid.Parse(userId),
                     ServicePackageId = package.Id,
                 };
+
 
                 await _unitOfWork.GenericRepository<UserPackage>().InsertAsync(userPackage);
                 await _unitOfWork.SaveChangeAsync();

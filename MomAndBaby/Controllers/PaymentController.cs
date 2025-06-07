@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MomAndBaby.Core.Base;
+using MomAndBaby.Core.Store;
+using MomAndBaby.Services.DTO.TransactionModel;
 using MomAndBaby.Services.DTO.UserPackageModel;
 using MomAndBaby.Services.DTO.VnPayModel;
 using MomAndBaby.Services.Interface;
+using Net.payOS.Types;
 
 namespace MomAndBaby.API.Controllers
 {
@@ -14,13 +17,15 @@ namespace MomAndBaby.API.Controllers
         private readonly IVnPayService _vnPayService;
         private readonly IUserPackageService _userPackageService;
         private readonly ITransactionService _transactionService;
+        private readonly IPayOsService _payOsService;
 
 
-        public PaymentController(IVnPayService vnPayService, IUserPackageService userPackageService, ITransactionService transactionService)
+        public PaymentController(IVnPayService vnPayService, IUserPackageService userPackageService, ITransactionService transactionService, IPayOsService payOsService)
         {
             _vnPayService = vnPayService;
             _userPackageService = userPackageService;
             _transactionService = transactionService;
+            _payOsService = payOsService;
         }
 
         [HttpPost("vnpay/service-package")]
@@ -114,19 +119,85 @@ namespace MomAndBaby.API.Controllers
             try
             {
                 var transactions = await _transactionService.GetTransactionByMonth(month, year, userId);
-                decimal total = 0;
+                decimal _total = 0;
                 if (transactions.Count != 0)
                 {
                     foreach (var i in transactions)
                     {
-                        total += i.Amount;
+                        _total += i.Amount;
                     }
                 }
                 return Ok(new
                 {
                     transactions,
-                    total = total
+                    total = _total
                 });
+            }
+            catch (BaseException ex)
+            {
+                return StatusCode(ex.ErrorCode, ex.ErrorMessage);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("payos/service-package")]
+        public async Task<IActionResult> CreatePaymentServicePackagePayOs(CreateUserPackage model)
+        {
+            try
+            {
+                var userPackage = await _userPackageService.CreateUserPackage(model);
+                
+                var url = await _payOsService.CreatePaymentLink(userPackage);
+                return Ok(url);
+            }
+            catch (BaseException ex)
+            {
+                return StatusCode(ex.ErrorCode, ex.ErrorMessage);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("payos/confirm-webhook")]
+        public async Task<IActionResult> ConfirmWebhook(string url)
+        {
+            try
+            {
+                var result = await _payOsService.ConfirmWebhook(url);
+                return Ok(result);
+            }
+            catch (BaseException ex)
+            {
+                return StatusCode(ex.ErrorCode, ex.ErrorMessage);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Callback endpoint for PayOs webhook notifications.
+        /// Processes payment and updates the transaction status based on the webhook data received from PayOs.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost("payos/webhook")]
+        public async Task<IActionResult> PayOsWebhook([FromBody] WebhookType model)
+        {
+            try
+            {
+                
+                var createTransactionDTO = await _payOsService.HandlePaymentWebhook(model);
+                if (createTransactionDTO is null) return Ok("Check confirm");
+
+                await _transactionService.CreateTransaction(createTransactionDTO);
+                return Ok(true);
             }
             catch (BaseException ex)
             {
