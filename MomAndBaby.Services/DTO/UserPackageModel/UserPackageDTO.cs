@@ -22,6 +22,7 @@ namespace MomAndBaby.Services.DTO.UserPackageModel
         public int ValidMonths { get; set; }
         public int? UsageCount { get; set; }
         public decimal Amount { get; set; }
+        public long? OrderCode { get; set; }
         public Guid UserId { get; set; }
         public virtual SubPackageViewModel ServicePackage { get; set; }
     }
