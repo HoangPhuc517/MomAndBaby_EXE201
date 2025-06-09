@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "apis1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.ApiManagement/service/MomAndBabyAPIapi/apis/MomAndBabyAPI",
+      "type": "apis.azure"
+    },
+    "mssql1": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('serviceConnectorResourceGroupName')]/providers/Microsoft.Web/sites/mom-and-baby/providers/Microsoft.ServiceLinker/linkers/ConnectionStringsMyDB1_CB1F5B6C95",
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/sqldbphuc/databases/MomAndBaby-EXE201",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:MyDB1",
+      "dynamicId": null
+    }
+  }
+}
