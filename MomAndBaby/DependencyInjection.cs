@@ -144,7 +144,7 @@ namespace MomAndBaby.API
             {
                 options.AddPolicy("AllowAll", policy =>
                 {
-                    policy.WithOrigins()
+                    policy.AllowAnyOrigin()
                           .AllowAnyMethod()
                           .AllowAnyHeader();
                 });
