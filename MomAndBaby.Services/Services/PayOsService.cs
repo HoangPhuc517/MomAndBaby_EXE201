@@ -59,7 +59,7 @@ namespace MomAndBaby.Services.Services
 
                 List<ItemData> items = new List<ItemData> { item };
 
-                var baseUrl = "https://momandbabyapp.com";
+                var baseUrl = "https://landing-page-exe-201.vercel.app";
 
                 PaymentData paymentData = new PaymentData(  model.OrderCode.Value,
                                                             2000,
