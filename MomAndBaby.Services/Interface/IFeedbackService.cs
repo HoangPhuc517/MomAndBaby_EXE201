@@ -14,5 +14,6 @@ namespace MomAndBaby.Services.Interface
         public Task<FeedbackViewModel> UpdateFeeback(UpdateFeedbackDTO updateModel);
         Task<Pagination<FeedbackViewModel>> GetFeedbackOfExpert(int pageSize, int pageIndex, bool isDescending, Guid ExpertId);
         public Task<FeedbackViewModel> GetFeedbackById(Guid FeedbackId);
+        public Task<(List<FeedbackViewModel>, int)> GetAllFeedback();
     }
 }

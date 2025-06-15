@@ -7,6 +7,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using MomAndBaby.Core.Base;
+using MomAndBaby.Core.Store;
 using MomAndBaby.Repositories.Entities;
 using MomAndBaby.Repositories.Interface;
 using MomAndBaby.Services.DTO.UserPackageModel;
@@ -156,6 +157,41 @@ namespace MomAndBaby.Services.Services
                               - (result.ValidMonths * package.ServicePackage.Price * (decimal)deal.DiscountRate);
 
                 return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<int> UserPackageTotalCount()
+        {
+            try
+            {
+                return await _unitOfWork.GenericRepository<UserPackage>()
+                                             .GetAll()
+                                             .CountAsync(_ => _.Status != BaseEnum.Pending.ToString());
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<CalendarExpertViewModel>> GetCalendarExpertByExpertId(Guid expertId, int month, int year)
+        {
+            try
+            {
+                var timeStart = new DateTime(year, month, 1).Date;
+                var timeEnd = timeStart.AddMonths(1).Date;
+                var appointments = await _unitOfWork.GenericRepository<Appointment>()
+                                                    .GetAllAsync(_ => _.ExpertId == expertId
+                                                                      && _.Status == AppointmentStatusEnum.Approved.ToString()
+                                                                      && _.AppointmentDate.Date >= timeStart
+                                                                      && _.AppointmentDate.Date < timeEnd,
+                                                                 "TimeSlot");
+                if (!appointments.Any()) throw new BaseException(StatusCodes.Status404NotFound, "No appointments found for this expert in the specified month and year.");
+                return _mapper.Map<List<CalendarExpertViewModel>>(appointments);
             }
             catch
             {
