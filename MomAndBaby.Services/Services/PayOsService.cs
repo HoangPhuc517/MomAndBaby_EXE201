@@ -62,7 +62,7 @@ namespace MomAndBaby.Services.Services
                 var baseUrl = "https://momandbabyapp.com";
 
                 PaymentData paymentData = new PaymentData(  model.OrderCode.Value,
-                                                            item.price,
+                                                            2000,
                                                             description,
                                                             items,
                                                             $"{baseUrl}/cancel",

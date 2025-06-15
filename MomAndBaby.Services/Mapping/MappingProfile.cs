@@ -80,6 +80,10 @@ namespace MomAndBaby.Services.Mapping
             CreateMap<Report, ReportModel>().ReverseMap();
             CreateMap<ChatHub, ResponseChatHup>().ReverseMap();
             CreateMap<ChatMessage, ResponseChatMessage>().ReverseMap();
+            CreateMap<Appointment, CalendarExpertViewModel>()
+                .ForMember(dest => dest.AppointmentDate, opt => opt.MapFrom(src => src.AppointmentDate))
+                .ForMember(dest => dest.Time, opt => opt.MapFrom(src => src.TimeSlot.Time))
+                .ReverseMap();
         }
     }
 }

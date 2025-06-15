@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using MomAndBaby.Core.Base;
 using MomAndBaby.Core.Store;
 using MomAndBaby.Repositories.Entities;
@@ -79,6 +80,22 @@ namespace MomAndBaby.Services.Services
             catch
             {
                 await _unitOfWork.RollbackTransactionAsync();
+                throw;
+            }
+        }
+
+        public async Task<(List<FeedbackViewModel>, int)> GetAllFeedback()
+        {
+            try
+            {
+                var feedbacks = _unitOfWork.GenericRepository<Feedback>()
+                                           .GetAll();
+
+                return(_mapper.Map<List<FeedbackViewModel>>(feedbacks.ToList()), await feedbacks.CountAsync());
+
+            }
+            catch
+            {
                 throw;
             }
         }

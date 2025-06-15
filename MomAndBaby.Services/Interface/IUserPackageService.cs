@@ -12,5 +12,7 @@ namespace MomAndBaby.Services.Interface
         Task<UserPackageViewModel> CreateUserPackage(CreateUserPackage createUserPackage);
         Task<UserPackageViewModel> GetUserPackageByUserCurrent();
         Task<UserPackageViewModel> GetUserPackageById(string id);
+        Task<int> UserPackageTotalCount();
+        Task<List<CalendarExpertViewModel>> GetCalendarExpertByExpertId(Guid expertId, int month, int year);
     }
 }
