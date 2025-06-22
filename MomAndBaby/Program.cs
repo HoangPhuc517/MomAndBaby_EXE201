@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using MomAndBaby.API;
 using MomAndBaby.Repositories;
 using MomAndBaby.Repositories.ConfigContext;
+using MomAndBaby.Repositories.Entities;
 using MomAndBaby.Services;
+using MomAndBaby.Services.HubRealTime;
 
 internal class Program
 {
@@ -74,6 +76,8 @@ internal class Program
         app.UseAuthorization();
 
         app.MapControllers();
+
+        app.MapHub<ChatHubR>("/chathub");
 
         app.Run();
     }

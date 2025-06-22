@@ -100,6 +100,8 @@ namespace MomAndBaby.API
                     }
                 };
             });
+
+            services.AddSignalR();
         }
 
         public static void AddSwaggerUIAuthentication(this IServiceCollection services)

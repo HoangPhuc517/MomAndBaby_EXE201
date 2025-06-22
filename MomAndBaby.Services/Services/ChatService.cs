@@ -5,11 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using MomAndBaby.Core.Base;
 using MomAndBaby.Core.Store;
 using MomAndBaby.Repositories.Entities;
 using MomAndBaby.Repositories.Interface;
 using MomAndBaby.Services.DTO.ChatModel;
+using MomAndBaby.Services.HubRealTime;
 using MomAndBaby.Services.Interface;
 
 namespace MomAndBaby.Services.Services
@@ -19,12 +21,14 @@ namespace MomAndBaby.Services.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICurrentUserService _currentUserService;
         private readonly IMapper _mapper;
+        private readonly IHubContext<ChatHubR> _hubContext;
 
-        public ChatService(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IMapper mapper)
+        public ChatService(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IMapper mapper, IHubContext<ChatHubR> hubContext)
         {
             _unitOfWork = unitOfWork;
             _currentUserService = currentUserService;
             _mapper = mapper;
+            _hubContext = hubContext;
         }
         public async Task<ResponseChatHup> CreateChatHup(Guid secondUserId, string nameChatHub)
         {
@@ -55,6 +59,7 @@ namespace MomAndBaby.Services.Services
                 await _unitOfWork.GenericRepository<ChatHub>().InsertAsync(chatHup);
                 await _unitOfWork.SaveChangeAsync();
                 await _unitOfWork.CommitTransactionAsync();
+
                 return _mapper.Map<ResponseChatHup>(chatHup);
             }
             catch
@@ -89,6 +94,18 @@ namespace MomAndBaby.Services.Services
                 };
                 await _unitOfWork.GenericRepository<ChatMessage>().InsertAsync(chatMessage);
                 await _unitOfWork.SaveChangeAsync();
+
+                var receiverId = chatHup.FirstUserId == currentUserId ? chatHup.SecondUserId : chatHup.FirstUserId;
+
+                await _hubContext.Clients.User(receiverId.ToString())
+                                 .SendAsync("ReceiveMessage", new
+                                 {
+                                     SenderId = currentUserId,
+                                     Content = chatMessage.Content,
+                                     Type = chatMessage.Type,
+                                     SentAt = chatMessage.CreatedTime
+                                 });
+
                 await _unitOfWork.CommitTransactionAsync();
             }
             catch
