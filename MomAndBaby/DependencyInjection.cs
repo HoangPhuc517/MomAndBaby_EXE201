@@ -12,7 +12,7 @@ namespace MomAndBaby.API
 {
     public static class DependencyInjection
     {
-        public static void AddConfigurationAPI( this IServiceCollection services, IConfiguration configuration)
+        public static void AddConfigurationAPI(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSwaggerUIAuthentication();
             services.ConfigureIdentity();
@@ -39,15 +39,15 @@ namespace MomAndBaby.API
                 options.Password.RequireUppercase = true;
                 options.Password.RequireLowercase = true;
                 options.User.AllowedUserNameCharacters =
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = true;
 
-                //Config SigIn
+                // SignIn settings
                 options.SignIn.RequireConfirmedPhoneNumber = false;
                 options.SignIn.RequireConfirmedEmail = false;
 
-                //Config Lockout
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(60*2);
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.AllowedForNewUsers = true;
             })
@@ -57,6 +57,12 @@ namespace MomAndBaby.API
 
         public static void AddAuthenticationBearer(this IServiceCollection services, IConfiguration configuration)
         {
+            // Validate all JWT settings before using
+            var secret = configuration["JWT:Secret"]
+                ?? throw new ArgumentNullException("JWT:Secret is missing in configuration");
+            var issuer = configuration["JWT:ValidIssuer"]
+                ?? throw new ArgumentNullException("JWT:ValidIssuer is missing in configuration");
+            var audience = configuration["JWT:ValidAudience"]; // audience có thể không cần validate nếu bạn không dùng
 
             services.AddAuthentication(options =>
             {
@@ -71,14 +77,13 @@ namespace MomAndBaby.API
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    ValidateAudience = false,
+                    ValidateAudience = !string.IsNullOrEmpty(audience),
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero,
 
-                    ValidAudience = configuration["JWT:ValidAudience"],
-                    ValidIssuer = configuration["JWT:ValidIssuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
-
+                    ValidAudience = audience,
+                    ValidIssuer = issuer,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
                 };
 
                 options.Events = new JwtBearerEvents
@@ -111,7 +116,11 @@ namespace MomAndBaby.API
                 var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EXE201_MomAndBaby.API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "EXE201_MomAndBaby.API",
+                    Version = "v1"
+                });
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
@@ -124,19 +133,19 @@ namespace MomAndBaby.API
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
                 {
-                    new OpenApiSecurityScheme
                     {
-                        Reference = new OpenApiReference
+                        new OpenApiSecurityScheme
                         {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    },
-                    new string[]{}
-                }
-            });
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
             });
         }
 

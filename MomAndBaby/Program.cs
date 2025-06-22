@@ -54,11 +54,11 @@ internal class Program
         var app = builder.Build();
 
         // Configure the database context
-        using (var scope = app.Services.CreateScope())
-        {
-            var dbContext = scope.ServiceProvider.GetRequiredService<MBContext>();
-            dbContext.Database.Migrate();
-        }
+        //using (var scope = app.Services.CreateScope())
+        //{
+        //    var dbContext = scope.ServiceProvider.GetRequiredService<MBContext>();
+        //    dbContext.Database.Migrate();
+        //}
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
