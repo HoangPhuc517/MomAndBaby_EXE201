@@ -77,7 +77,14 @@ internal class Program
 
         app.MapControllers();
 
-        app.MapHub<ChatHubR>("/chathub");
+        app.MapHub<ChatHubR>("/chathub", options =>
+        {
+            options.Transports =
+                Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets |
+                Microsoft.AspNetCore.Http.Connections.HttpTransportType.ServerSentEvents |
+                Microsoft.AspNetCore.Http.Connections.HttpTransportType.LongPolling;
+        });
+
 
         app.Run();
     }
