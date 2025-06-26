@@ -88,10 +88,10 @@ namespace MomAndBaby.Services.Services
         {
             try
             {
-                var feedbacks = _unitOfWork.GenericRepository<Feedback>()
-                                           .GetAll();
+                var feedbacks = await _unitOfWork.GenericRepository<Feedback>()
+                                           .GetAllAsync(_ => _.Status != BaseEnum.Deleted.ToString(), "Appointment");
 
-                return(_mapper.Map<List<FeedbackViewModel>>(feedbacks.ToList()), await feedbacks.CountAsync());
+                return(_mapper.Map<List<FeedbackViewModel>>(feedbacks), feedbacks.Count);
 
             }
             catch
