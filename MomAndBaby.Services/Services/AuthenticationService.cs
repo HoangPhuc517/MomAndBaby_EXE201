@@ -211,7 +211,7 @@ namespace MomAndBaby.Services.Services
         public async Task<AuthenResponse> LoginAsync(LoginRequest model)
         {
             try
-            {
+            { 
                 var user = await _userManager.FindByNameAsync(model.UserName);
 
                 if (user == null)
