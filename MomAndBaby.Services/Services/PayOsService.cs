@@ -99,7 +99,7 @@ namespace MomAndBaby.Services.Services
                     Message = data.description,
                     TransferAccountName = data.counterAccountName ?? "PayOS",
                     TransferAccountNumber = data.counterAccountNumber ?? "PayOS",
-                    CreatedTime = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7)),
+                    CreatedTime = DateTimeOffset.UtcNow,
                     UserId = userPackage.UserId,
                     Status = webhookData.success ? BaseEnum.Success.ToString() : BaseEnum.Failed.ToString()
 

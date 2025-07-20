@@ -30,8 +30,7 @@ namespace MomAndBaby.Services.DTO.UserModel
         public string FullName { get; set; }
 
         [Required]
-        [DataType(DataType.Date)]
-        public DateTime DateOfBirth { get; set; }
+        public DateTimeOffset DateOfBirth { get; set; }
 
         public UserSexEnum Sex { get; set; }
     }

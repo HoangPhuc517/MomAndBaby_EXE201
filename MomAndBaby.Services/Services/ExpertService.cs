@@ -90,7 +90,7 @@ namespace MomAndBaby.Services.Services
                     );
                 if (expertDb is null) throw new BaseException(StatusCodes.Status404NotFound, "Expert not exist!!!");
                 _mapper.Map(model, expertDb);
-                expertDb.UpdatedTime = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7));
+                expertDb.UpdatedTime = DateTimeOffset.UtcNow;
                 _unitOfWork.GenericRepository<Expert>().Update(expertDb);
                 await _unitOfWork.SaveChangeAsync();
                 var expertViewModel = _mapper.Map<ExpertProfileViewModel>(expertDb);
@@ -116,7 +116,7 @@ namespace MomAndBaby.Services.Services
                     );
                 if (expertDb is null) throw new BaseException(StatusCodes.Status404NotFound, "Expert not exist!!!");
                 expertDb.Status = statusRequest.ToString();
-                expertDb.UpdatedTime = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7));
+                expertDb.UpdatedTime = DateTimeOffset.UtcNow;
                 _unitOfWork.GenericRepository<Expert>().Update(expertDb);
                 await _unitOfWork.SaveChangeAsync();
                 var expertViewModel = _mapper.Map<ExpertProfileViewModel>(expertDb);

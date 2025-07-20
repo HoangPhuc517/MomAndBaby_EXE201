@@ -63,7 +63,7 @@ namespace MomAndBaby.Services.Services
 
                 var userDb = _mapper.Map<User>(model);
                 userDb.Status = BaseEnum.Active.ToString();
-                userDb.CreatedTime = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7));
+                userDb.CreatedTime = DateTimeOffset.UtcNow;
                 userDb.UpdatedTime = userDb.CreatedTime;
 
                 var result = await _userManager.CreateAsync(userDb, model.Password);
@@ -118,7 +118,7 @@ namespace MomAndBaby.Services.Services
 
                 var userDb = _mapper.Map<User>(model);
                 userDb.Status = BaseEnum.Active.ToString();
-                userDb.CreatedTime = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7));
+                userDb.CreatedTime = DateTimeOffset.UtcNow;
                 userDb.UpdatedTime = userDb.CreatedTime;
                 userDb.Expert.Status = BaseEnum.Pending.ToString();
 
@@ -174,7 +174,7 @@ namespace MomAndBaby.Services.Services
 
                 var userDb = _mapper.Map<User>(model);
                 userDb.Status = BaseEnum.Active.ToString();
-                userDb.CreatedTime = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7));
+                userDb.CreatedTime = DateTimeOffset.UtcNow;
                 userDb.UpdatedTime = userDb.CreatedTime;
 
                 var result = await _userManager.CreateAsync(userDb, model.Password);
@@ -219,7 +219,7 @@ namespace MomAndBaby.Services.Services
                     throw new BaseException(StatusCodes.Status404NotFound, "Account not found!!!");
                 }
 
-                if (user.LockoutEnd >= DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7)))
+                if (user.LockoutEnd >= DateTimeOffset.UtcNow)
                 {
                     var lockoutEnd = await _userManager.GetLockoutEndDateAsync(user);
                     var lockoutTime = lockoutEnd?.UtcDateTime.ToLocalTime().ToString("dd/MM/yyyy HH:mm");
@@ -251,7 +251,7 @@ namespace MomAndBaby.Services.Services
                 string token = await _jwtTokenService.GenerateJwtToken(user);
                 string refreshToken = await _jwtTokenService.GenerateRefreshToken(user);
                 user.RefreshToken = refreshToken;
-                user.DateExpireRefreshToken = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7)).AddDays(7);
+                user.DateExpireRefreshToken = DateTimeOffset.UtcNow.AddDays(7);
 
                 _unitOfWork.GenericRepository<User>().Update(user);
                 await _unitOfWork.SaveChangeAsync();

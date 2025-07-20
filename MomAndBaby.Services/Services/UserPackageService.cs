@@ -78,7 +78,6 @@ namespace MomAndBaby.Services.Services
                 {
                     Status = BaseEnum.Pending.ToString(),
                     ExpiryDate = DateTimeOffset.UtcNow
-                                               .ToOffset(TimeSpan.FromHours(7))
                                                .AddMonths(createUserPackage.MonthNumber),
                     ValidMonths = createUserPackage.MonthNumber,
                     UsageCount = package.MonthlyUsageLimit,

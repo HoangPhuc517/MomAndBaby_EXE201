@@ -38,7 +38,7 @@ namespace MomAndBaby.Services.Services
                     if (userPackage is null) throw new BaseException(StatusCodes.Status404NotFound, "User package not found");
 
 
-                    userPackage.UpdatedTime = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7));
+                    userPackage.UpdatedTime = DateTimeOffset.UtcNow;
                     userPackage.Status = BaseEnum.Active.ToString();
                     _unitOfWork.GenericRepository<UserPackage>().Update(userPackage);
                 }

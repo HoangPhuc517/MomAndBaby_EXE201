@@ -132,7 +132,7 @@ namespace MomAndBaby.Services.Services
                 }
 
                 journal.Image = imageUrl;
-                journal.UpdatedTime = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7));
+                journal.UpdatedTime = DateTimeOffset.UtcNow;
 
                 _unitOfWork.GenericRepository<Journal>().Update(journal);
                 await _unitOfWork.SaveChangeAsync();
