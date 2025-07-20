@@ -25,7 +25,7 @@ namespace MomAndBaby.API
         {
             services.AddDbContext<MBContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("MyDB"));
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
             });
         }
 
