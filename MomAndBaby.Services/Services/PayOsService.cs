@@ -62,7 +62,7 @@ namespace MomAndBaby.Services.Services
                 var baseUrl = "https://landing-page-exe-201.vercel.app";
 
                 PaymentData paymentData = new PaymentData(  model.OrderCode.Value,
-                                                            2000,
+                                                            item.price,
                                                             description,
                                                             items,
                                                             $"{baseUrl}/cancel",
