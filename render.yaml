@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: momandbaby-api
+    runtime: dotnet
+    region: singapore
+    buildCommand: dotnet build -c Release
+    startCommand: dotnet MomAndBaby.API.dll
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+    plan: free
+    branch: main
+    buildFilter:
+      paths:
+        - "**/*.cs"
+        - "**/*.csproj"
+        - "**/*.json"
+        - "**/*.yaml"

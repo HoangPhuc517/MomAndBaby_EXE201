@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: momandbaby-api
+    runtime: docker
+    plan: free
+    region: singapore
+    branch: Render-Deploy
+    dockerfilePath: ./MomAndBaby/Dockerfile
