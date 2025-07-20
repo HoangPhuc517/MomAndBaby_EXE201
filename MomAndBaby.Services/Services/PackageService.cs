@@ -68,7 +68,7 @@ namespace MomAndBaby.Services.Services
 
                 
                 _mapper.Map(packageModel, package);
-                package.UpdatedTime = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7));
+                package.UpdatedTime = DateTimeOffset.UtcNow;
 
                 _unitOfWork.GenericRepository<ServicePackage>().Update(package); 
 
@@ -100,7 +100,7 @@ namespace MomAndBaby.Services.Services
                 if (package is null) throw new BaseException(StatusCodes.Status404NotFound, "Package not found");
 
                 package.Status = statusEnum.ToString();
-                package.UpdatedTime = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7));
+                package.UpdatedTime = DateTimeOffset.UtcNow;
 
                 _unitOfWork.GenericRepository<ServicePackage>()
                            .Update(package);

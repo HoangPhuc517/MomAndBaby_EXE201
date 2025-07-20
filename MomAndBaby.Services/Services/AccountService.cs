@@ -126,7 +126,7 @@ namespace MomAndBaby.Services.Services
                 if (userDb is null) throw new BaseException(StatusCodes.Status404NotFound, "User not found");
 
                 _mapper.Map(userUpdateDTO, userDb);
-                userDb.UpdatedTime = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7));
+                userDb.UpdatedTime = DateTimeOffset.UtcNow;
                 _unitOfWork.GenericRepository<User>().Update(userDb);
 
                 await _unitOfWork.SaveChangeAsync();

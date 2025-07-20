@@ -7,7 +7,7 @@ namespace MomAndBaby.Repositories.Entities
     {
         public string FullName { get; set; }
         public string? Avatar { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public DateTimeOffset DateOfBirth { get; set; }
         public UserSexEnum Sex { get; set; }
         public string Status { get; set; }
         public DateTimeOffset CreatedTime { get; set; }

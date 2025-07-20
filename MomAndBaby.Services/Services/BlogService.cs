@@ -61,7 +61,7 @@ namespace MomAndBaby.Services.Services
                     throw new BaseException(StatusCodes.Status404NotFound, "Blog not found");
                 }
                 blog.Status = BaseEnum.Deleted.ToString();
-                blog.UpdatedTime = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7));
+                blog.UpdatedTime = DateTimeOffset.UtcNow;
                 _unitOfWork.GenericRepository<Blog>().Update(blog);
                 await _unitOfWork.SaveChangeAsync();
                 await _unitOfWork.CommitTransactionAsync();
@@ -138,8 +138,8 @@ namespace MomAndBaby.Services.Services
                     throw new BaseException(StatusCodes.Status403Forbidden, "You do not have permission to update this blog");
                 }
                 blog = _mapper.Map(model, blog);
-                blog.UpdatedTime = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7));
-
+                blog.UpdatedTime = DateTimeOffset.UtcNow;
+                    
                 _unitOfWork.GenericRepository<Blog>().Update(blog);
                 await _unitOfWork.SaveChangeAsync();
                 await _unitOfWork.CommitTransactionAsync();

@@ -94,14 +94,14 @@ namespace MomAndBaby.Services.Services
                 {
                     throw new BaseException(StatusCodes.Status403Forbidden, "Access denied. Insufficient permissions!!!");
                 }
-                if (user.DateExpireRefreshToken < DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7)))
+                if (user.DateExpireRefreshToken < DateTimeOffset.UtcNow)
                 {
                     throw new BaseException(StatusCodes.Status403Forbidden, "Refresh token expired!!!");
                 }
                 var newRefreshToken = await GenerateRefreshToken(user);
                 var newAccessToken = await GenerateJwtToken(user);
                 user.RefreshToken = newRefreshToken;
-                user.DateExpireRefreshToken = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7)).AddDays(7);
+                user.DateExpireRefreshToken = DateTimeOffset.UtcNow.AddDays(7);
                 await _userManager.UpdateAsync(user);
                 await _unitOfWork.SaveChangeAsync();
                 await _unitOfWork.CommitTransactionAsync();

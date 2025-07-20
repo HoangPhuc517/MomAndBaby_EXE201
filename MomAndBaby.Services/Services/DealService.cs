@@ -68,7 +68,7 @@ namespace MomAndBaby.Services.Services
 
                 _mapper.Map(dealModel, deal);
 
-                deal.UpdatedTime = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7));
+                deal.UpdatedTime = DateTimeOffset.UtcNow;
                 _unitOfWork.GenericRepository<Deal>().Update(deal);
 
                 await _unitOfWork.SaveChangeAsync();

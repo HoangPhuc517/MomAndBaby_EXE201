@@ -63,7 +63,7 @@ namespace MomAndBaby.Services.Services
 
                 var userDb = _mapper.Map<User>(model);
                 userDb.Status = BaseEnum.Active.ToString();
-                userDb.CreatedTime = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7));
+                userDb.CreatedTime = DateTimeOffset.UtcNow;
                 userDb.UpdatedTime = userDb.CreatedTime;
 
                 var result = await _userManager.CreateAsync(userDb, model.Password);
@@ -118,7 +118,7 @@ namespace MomAndBaby.Services.Services
 
                 var userDb = _mapper.Map<User>(model);
                 userDb.Status = BaseEnum.Active.ToString();
-                userDb.CreatedTime = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7));
+                userDb.CreatedTime = DateTimeOffset.UtcNow;
                 userDb.UpdatedTime = userDb.CreatedTime;
                 userDb.Expert.Status = BaseEnum.Pending.ToString();
 
@@ -174,7 +174,7 @@ namespace MomAndBaby.Services.Services
 
                 var userDb = _mapper.Map<User>(model);
                 userDb.Status = BaseEnum.Active.ToString();
-                userDb.CreatedTime = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7));
+                userDb.CreatedTime = DateTimeOffset.UtcNow;
                 userDb.UpdatedTime = userDb.CreatedTime;
 
                 var result = await _userManager.CreateAsync(userDb, model.Password);

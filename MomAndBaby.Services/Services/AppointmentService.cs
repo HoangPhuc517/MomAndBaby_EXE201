@@ -40,7 +40,7 @@ namespace MomAndBaby.Services.Services
             await _unitOfWork.BeginTransactionAsync();
             try
             {
-                var dateNow = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7));
+                var dateNow = DateTimeOffset.UtcNow;
 
                 var userExpert = await _unitOfWork.GenericRepository<User>()
                                                   .GetFirstOrDefaultAsync(_ => _.Expert.Id == appointment.ExpertId, "Expert");
@@ -264,7 +264,7 @@ namespace MomAndBaby.Services.Services
                 {
                     if (statusEnum.Equals(AppointmentStatusEnum.Canceled))
                     {
-                        var numberDays = (appointment.AppointmentDate.Date - DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7)).Date).TotalDays;
+                        var numberDays = (appointment.AppointmentDate.Date - DateTimeOffset.UtcNow.Date).TotalDays;
                         if (numberDays < 2)
                         {
                             throw new BaseException(StatusCodes.Status400BadRequest, "You cannot cancel the appointment less than 48 hours before the scheduled time!!!");

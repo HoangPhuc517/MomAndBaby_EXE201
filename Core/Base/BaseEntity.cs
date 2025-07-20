@@ -8,7 +8,7 @@ namespace MomAndBaby.Core.Base
         protected BaseEntity()
         {
             Id = Guid.NewGuid();
-            CreatedTime = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(7));
+            CreatedTime = DateTimeOffset.UtcNow;
             UpdatedTime = CreatedTime;
             Status = BaseEnum.Active.ToString();
         }
