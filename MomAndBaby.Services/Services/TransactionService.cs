@@ -109,8 +109,8 @@ namespace MomAndBaby.Services.Services
                 var endDate = startDate.AddMonths(1);
 
                 var transactions = await _unitOfWork.GenericRepository<Transaction>()
-                    .GetAllAsync(filter: _ => _.CreatedTime >= startDate
-                                              && _.CreatedTime < endDate
+                    .GetAllAsync(filter: _ => _.CreatedTime.Date >= startDate.Date
+                                              && _.CreatedTime.Date < endDate.Date
                                               && (string.IsNullOrEmpty(userId) || _.UserId.ToString() == userId),
                                  includeProperties: null);
                 if (transactions is null)
